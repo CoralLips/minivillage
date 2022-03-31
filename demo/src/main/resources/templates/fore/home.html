@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>迷你部落-首页</title>
+  <!--  生产环境  -->
+  <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+  <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+  <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+  <script src="lib/layui/layui.js"></script>
+  <link rel="stylesheet" href="lib/layui/css/layui.css">
+  <link rel="stylesheet" href="css/common.css">
+</head>
+
+
+
+<!-- 页眉 -->
+<header th:replace="included/header::header-fragment"></header>
+
+<body class="common-bg">
+
+
+<div id="padding-header">
+  <!-- 公告栏 -->
+  <blockquote class="layui-elem-quote layui-text" style="margin-top: 15px;">
+    <p><b>公告栏：</b> 以平山村为试点的区域性社交平台</p>
+    <hr>
+    <p style="text-indent:2em;">首页：加个轮播，没想好咋弄；</p>
+    <p style="text-indent:2em;">消息广场：主要用来做论坛；</p>
+    <p style="text-indent:2em;">地图：进行论坛信息以及商品信息的区域性关联，进行用户信息的展示；</p>
+    <p style="text-indent:2em;">列表：因为地图的功能暂时做不出来，所以先用列表进行过渡；（转租信息，租房历代评价，二手市场）；</p>
+    <hr>
+    <p><b>目标：</b> </p>
+    <p style="text-indent:2em;">从城中村区域性论坛和社交媒体入手，结合转租以及二手市场； </p>
+    <p style="text-indent:2em;">商业化：结合附近商家，打造运营圈；</p>
+  </blockquote>
+</div>
+
+
+</body>
+
+
+</html>
+

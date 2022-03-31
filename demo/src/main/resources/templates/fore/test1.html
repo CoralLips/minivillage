@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户中心</title>
+    <!--  生产环境  -->
+    <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+    <script src="lib/layui/layui.js"></script>
+    <link rel="stylesheet" href="lib/layui/css/layui.css">
+    <link rel="stylesheet" href="css/userCenter.css">
+    <link rel="stylesheet" href="css/common.css">
+    <!--  bootstrap支持  -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<!-- 页眉 -->
+<header th:replace="included/header::header-fragment"></header>
+
+<!-- 页面主体 -->
+<body class="login-bg">
+
+<div id="padding-header">
+    <!-- header padding: 15% + 15%; -->
+    <div id="userCenter">
+
+
+
+        <!-- 用户中心-sidebar -->
+        <div class="lfnav" style="float:left; margin-left: 10%; margin-top: 10%">
+            <div class="nav_title">用户中心</div>
+            <div class="title_list">
+                <ul>
+                    <li><a th:href="userCenter" th:class="${path=='userCenter'?'active':''}">账户信息</a></li>
+                    <li><a th:href="villageCenter" th:class="${path=='villageCenter'?'active':''}">部落绑定</a></li>
+                    <hr>
+                    <li><a href="logout">退出登录</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- /用户中心-sidebar -->
+
+
+        <!-- 用户中心-右侧主体 -->
+        <!-- 切换页1 -->
+        <div class="intro" style="float:left; margin-left: 5%; margin-top: 10%">
+            <div class="grzlbt ml40" style="margin-left: 5%; margin-top: 10px">我的资料
+                <!-- 按钮触发模态框 -->
+                <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#userDataUpdatedModal" style="margin-left:50%">更改资料</button>
+            </div>
+
+            <div class="info_item" style="margin-left: 5%; margin-top: 10px">
+                <span>昵称</span>
+                <span th:text="${session.user.name}">null</span>
+            </div>
+
+            <div class="info_item">
+                <span>账号</span>
+                <span th:text="${session.user.account}">null</span>
+            </div>
+
+            <div class="info_item">
+                <span>密码</span>
+                <span th:text="${session.user.password}" type="password">null</span>
+            </div>
+
+
+        </div>
+
+
+
+
+        <!-- 模态框（Modal） -->
+        <div class="modal fade" id="userDataUpdatedModal" tabindex="-1" role="dialog" aria-labelledby="userDataUpdatedModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h6 class="modal-title" id="personalInfoModalLabel">个人信息修改</h6>
+                    </div>
+                    <div class="modal-body">
+                        <form id="personalInfoForm">
+                            <div class="form-group">
+                                <label for="user_name" class="control-label">昵称:</label>
+                                <input type="text" class="form-control" id="user_name" th:value="${session.user.name}">
+                            </div>
+                            <div class="form-group">
+                                <label for="user_password" class="control-label">密码</label>
+                                <input type="text" class="form-control" id="user_password"  th:value="${session.user.password}">      <!-- 验证相同和下面 -->
+                            </div>
+                            <div class="form-group">
+                                <label for="user_passwordConfirmed" class="control-label">确认密码</label>
+                                <input type="text" class="form-control" id="user_passwordConfirmed" th:value="${session.user.password}">   <!-- 验证相同和上面 -->
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="UpdateUserdataButton" @click ="UpdateUserdata">确认</button>     <!-- 绑定数据提交 -->
+                    </div>
+                </div>
+
+            </div><!-- /.modal -->
+        </div>
+        <!-- /.modal -->
+
+
+
+
+
+
+    </div>
+</div>
+
+
+
+
+
+<script>
+    $(function  () {
+        new Vue({
+            el: '#userCenter',
+            data: {
+                result: [],
+                userUpdated: {account:'', name:'', password:''}
+            },
+
+            methods: {
+                UpdateUserdata: function(){
+
+                    // to be used
+                    this.userUpdated.name = $("#user_name").val();
+                    this.userUpdated.password = $("#user_password").val();
+
+                    if(this.userUpdated.password != $("#user_passwordConfirmed").val()){
+                        window.alert("两次密码输入不相同")
+                        return;
+                    }
+
+
+
+                    let url = 'updateUserForNameAndPassword';
+                    axios.post(url,this.userUpdated).then(function(response) {
+
+                        this.result = response.data;
+                        if (result.code == 1) {
+                            window.alert("修改信息成功");
+                            $('#userDataUpdatedModal').modal('hide');
+                            location.reload();
+                        }
+                        else {
+                            window.alert(result.message);
+                            return;
+                        }
+
+                    });
+
+
+                }
+            }
+        })
+    })
+</script>
+
+<script>
+
+</script>
+
+
+</body>
+</html>
